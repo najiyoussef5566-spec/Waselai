@@ -29,7 +29,7 @@
                 <i class="fa-solid fa-robot text-sm"></i>
             </div>
             <div class="bg-slate-800 border border-slate-700/50 p-4 rounded-2xl max-w-[85%] text-slate-200">
-                مرحباً بك في **واصل AI**! أهلاً بك، أنا جاهز لإجابة كل أسئلتك وتساؤلاتك بشكل مباشر وسريع.
+                مرحباً بك في **واصل AI**! أهلاً بك، أنا جاهز لإجابة كل أسئلتك واستفساراتك.
             </div>
         </div>
     </main>
@@ -82,11 +82,21 @@
             `;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // 3. إرسال الطلب لمحرك ذكاء اصطناعي مفتوح وبدون مفاتيح
+            // 3. الاتصال بسيرفر مستقر وعالي السرعة
             try {
-                const response = await fetch("https://text.pollinations.ai/" + encodeURIComponent(text) + "?model=openai&system=" + encodeURIComponent("أنت مساعد ذكي ولطيف اسمه واصل AI تجيب دائما باللغة العربية باحترافية."));
-                const aiReply = await response.text();
+                const response = await fetch("https://text.pollinations.ai/", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: "system", content: "أنت مساعد ذكي ولطيف اسمه واصل AI تجيب دائماً باللغة العربية باحترافية وسرعة." },
+                            { role: "user", content: text }
+                        ],
+                        model: "mistral"
+                    })
+                });
 
+                const aiReply = await response.text();
                 document.getElementById(loadingId).remove();
 
                 chatBox.innerHTML += `
@@ -109,7 +119,7 @@
                             <i class="fa-solid fa-triangle-exclamation text-sm"></i>
                         </div>
                         <div class="bg-slate-800 border border-red-500/30 p-4 rounded-2xl max-w-[85%] text-red-300">
-                            تعذر الاتصال بالخادم، يرجى إعادة المحاولة.
+                            تعذر الحصول على الرد، يرجى المحاولة مرة أخرى.
                         </div>
                     </div>
                 `;
