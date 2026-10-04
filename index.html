@@ -1,367 +1,670 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>واصل AI - Wasel AI</title>  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Tahoma, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .brand span {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .welcome {
+      text-align: center;
+      padding: 70px 20px;
+      color: #6b7280;
+    }
+
+    .welcome h2 {
+      color: #172033;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 18px;
+    }
+
+    .message.user {
+      justify-content: flex-start;
+    }
+
+    .message.ai {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 85%;
+      padding: 13px 16px;
+      border-radius: 18px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .user .bubble {
+      background: #2563eb;
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .ai .bubble {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-bottom-left-radius: 5px;
+    }
+
+    .file-preview {
+      margin-bottom: 8px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: #eef2ff;
+      color: #374151;
+      font-size: 13px;
+    }
+
+    .generated-image {
+      display: block;
+      max-width: 100%;
+      border-radius: 15px;
+      margin-top: 8px;
+    }
+
+    .input-area {
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      padding: 12px;
+      position: sticky;
+      bottom: 0;
+    }
+
+    .selected-file {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .selected-file button {
+      border: 0;
+      background: transparent;
+      color: #dc2626;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    textarea {
+      flex: 1;
+      resize: none;
+      min-height: 48px;
+      max-height: 150px;
+      border: 1px solid #d1d5db;
+      border-radius: 15px;
+      padding: 13px;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #2563eb;
+    }
+
+    .btn {
+      width: 48px;
+      height: 48px;
+      border: 0;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attach-btn {
+      background: #eef2ff;
+      color: #2563eb;
+    }
+
+    .send-btn {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .status {
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      padding: 5px;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      #chat {
+        padding: 12px;
+      }
+
+      .bubble {
+        max-width: 92%;
+      }
+
+      header {
+        padding: 12px 15px;
+      }
+
+      .welcome {
+        padding: 50px 15px;
+      }
+    }
+  </style></head><body><div class="app">  <header>
+    <div class="brand">
+      <div class="logo">و</div>  <div>
+    <h1>واصل AI</h1>
+    <span>مساعدك الذكي متعدد الوسائط</span>
+  </div>
+</div>
+
+  </header>  <main id="chat"><div class="welcome" id="welcome">
+  <h2>مرحبًا بك في واصل AI 👋</h2>
+
+  <p>
+    اسألني أي شيء، أو أرسل صورة، فيديو، ملف صوتي أو PDF لتحليله.
+  </p>
+
+  <p>
+    ويمكنك أيضًا طلب إنشاء صورة بالذكاء الاصطناعي.
+  </p>
+</div>
+
+  </main>  <div class="input-area"><div class="selected-file" id="selectedFile">
+
+  <span id="fileName"></span>
+
+  <button onclick="removeFile()" title="إزالة الملف">
+    ×
+  </button>
+
+</div>
+
+
+<div class="status" id="status">
+  جاري التفكير...
+</div>
+
+
+<div class="input-row">
+
+  <button
+    class="btn attach-btn"
+    onclick="document.getElementById('fileInput').click()"
+    title="إرفاق ملف">
+    📎
+  </button>
+
+
+  <input
+    type="file"
+    id="fileInput"
+    accept="
+      image/*,
+      video/*,
+      audio/*,
+      application/pdf
+    "
+    onchange="handleFile(event)"
+  >
 
-    <title>واصل AI</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+  <textarea
+    id="messageInput"
+    placeholder="اكتب رسالتك هنا..."
+    rows="1"
+    onkeydown="handleKey(event)"
+  ></textarea>
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+  <button
+    class="btn send-btn"
+    id="sendBtn"
+    onclick="sendMessage()"
+    title="إرسال">
+    ➤
+  </button>
 
-        * {
-            box-sizing: border-box;
-        }
+</div>
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-        }
+  </div></div><script>
 
-        #chat-box {
-            scroll-behavior: smooth;
-        }
+  let selectedFile = null;
 
-        .message {
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-    </style>
-</head>
 
-<body class="bg-slate-950 text-white min-h-screen flex flex-col">
+  function handleFile(event) {
 
-    <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur">
-        <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
+    const file = event.target.files[0];
 
-            <div class="flex items-center gap-3">
+    if (!file) {
+      return;
+    }
 
-                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-xl shadow-lg">
-                    و
-                </div>
 
-                <div>
-                    <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                        واصل AI
-                    </h1>
+    const maxSize = 3.5 * 1024 * 1024;
 
-                    <p class="text-xs text-slate-500">
-                        Wasel AI
-                    </p>
-                </div>
+    if (file.size > maxSize) {
 
-            </div>
+      alert(
+        "حجم الملف كبير جدًا.\n\n" +
+        "الحد الحالي هو 3.5 MB."
+      );
 
-            <div class="text-xs px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-2">
+      event.target.value = "";
+      return;
+    }
 
-                <span class="w-2 h-2 bg-emerald-400 rounded-full"></span>
 
-                Gemini نشط
-            </div>
+    const allowed = [
+      "image/",
+      "video/",
+      "audio/",
+      "application/pdf"
+    ];
 
-        </div>
-    </header>
 
+    const supported = allowed.some(type =>
+      file.type.startsWith(type) ||
+      file.type === type
+    );
 
-    <main
-        id="chat-box"
-        class="flex-1 w-full max-w-4xl mx-auto p-4 overflow-y-auto space-y-5"
-    >
 
-        <div class="flex gap-3 items-start">
+    if (!supported) {
 
-            <div class="w-9 h-9 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-robot"></i>
-            </div>
+      alert("نوع الملف غير مدعوم.");
 
-            <div class="bg-slate-800 border border-slate-700/50 p-4 rounded-2xl max-w-[85%] text-slate-200 message">
+      event.target.value = "";
+      return;
+    }
 
-                مرحباً بك في واصل AI! 👋
 
-                أنا مساعدك الذكي. اكتب سؤالك وسأحاول مساعدتك.
+    selectedFile = file;
 
-            </div>
 
-        </div>
+    document.getElementById("fileName").textContent =
+      "📎 " + file.name;
 
-    </main>
 
+    document.getElementById("selectedFile").style.display =
+      "flex";
+  }
 
-    <footer class="border-t border-slate-800 bg-slate-950 p-4">
 
-        <div class="max-w-4xl mx-auto">
 
-            <form
-                id="chat-form"
-                class="flex gap-2 bg-slate-800 p-2 rounded-2xl border border-slate-700 focus-within:border-indigo-500 transition"
-            >
+  function removeFile() {
 
-                <input
-                    type="text"
-                    id="user-input"
-                    placeholder="اكتب رسالتك هنا..."
-                    autocomplete="off"
-                    required
-                    class="flex-1 bg-transparent px-3 outline-none text-slate-100 placeholder-slate-500"
-                >
+    selectedFile = null;
 
-                <button
-                    id="send-button"
-                    type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 px-5 py-3 rounded-xl text-white font-medium transition flex items-center gap-2"
-                >
+    document.getElementById("fileInput").value = "";
 
-                    <span>إرسال</span>
+    document.getElementById("selectedFile").style.display =
+      "none";
+  }
 
-                    <i class="fa-solid fa-paper-plane text-xs"></i>
 
-                </button>
 
-            </form>
+  function handleKey(event) {
 
-            <p class="text-center text-xs text-slate-600 mt-3">
-                واصل AI قد يخطئ، تحقق من المعلومات المهمة.
-            </p>
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
 
-        </div>
+      event.preventDefault();
 
-    </footer>
+      sendMessage();
+    }
+  }
 
 
-    <script>
 
-        const chatForm = document.getElementById("chat-form");
-        const userInput = document.getElementById("user-input");
-        const chatBox = document.getElementById("chat-box");
-        const sendButton = document.getElementById("send-button");
+  function addMessage(type, content) {
 
+    const chat = document.getElementById("chat");
 
-        function escapeHTML(text) {
+    const welcome = document.getElementById("welcome");
 
-            const div = document.createElement("div");
+    if (welcome) {
+      welcome.remove();
+    }
 
-            div.textContent = text;
 
-            return div.innerHTML;
-        }
+    const message = document.createElement("div");
 
+    message.className =
+      "message " + type;
 
-        function addUserMessage(text) {
 
-            chatBox.innerHTML += `
+    const bubble = document.createElement("div");
 
-                <div class="flex gap-3 items-start justify-end">
+    bubble.className = "bubble";
 
-                    <div class="bg-indigo-600 text-white p-4 rounded-2xl max-w-[85%] message">
 
-                        ${escapeHTML(text)}
+    if (typeof content === "string") {
 
-                    </div>
+      bubble.textContent = content;
 
-                </div>
+    } else {
 
-            `;
+      bubble.appendChild(content);
+    }
 
-            scrollChat();
-        }
 
+    message.appendChild(bubble);
 
-        function addAIMessage(text) {
+    chat.appendChild(message);
 
-            chatBox.innerHTML += `
+    chat.scrollTop = chat.scrollHeight;
 
-                <div class="flex gap-3 items-start">
+    return bubble;
+  }
 
-                    <div class="w-9 h-9 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center shrink-0">
 
-                        <i class="fa-solid fa-robot text-sm"></i>
 
-                    </div>
+  function addImageMessage(imageData, text) {
 
-                    <div class="bg-slate-800 border border-slate-700/50 p-4 rounded-2xl max-w-[85%] text-slate-200 message">
+    const wrapper = document.createElement("div");
 
-                        ${escapeHTML(text)}
 
-                    </div>
+    if (text) {
 
-                </div>
+      const textElement =
+        document.createElement("div");
 
-            `;
+      textElement.textContent = text;
 
-            scrollChat();
-        }
+      textElement.style.marginBottom = "10px";
 
+      wrapper.appendChild(textElement);
+    }
 
-        function addErrorMessage(text) {
 
-            chatBox.innerHTML += `
+    const image =
+      document.createElement("img");
 
-                <div class="flex gap-3 items-start">
+    image.src = imageData;
 
-                    <div class="w-9 h-9 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center shrink-0">
+    image.className =
+      "generated-image";
 
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+    image.alt =
+      "الصورة التي أنشأها واصل AI";
 
-                    </div>
 
-                    <div class="bg-slate-800 border border-red-500/30 p-4 rounded-2xl max-w-[85%] text-red-300 message">
+    wrapper.appendChild(image);
 
-                        ${escapeHTML(text)}
 
-                    </div>
+    addMessage("ai", wrapper);
+  }
 
-                </div>
 
-            `;
 
-            scrollChat();
-        }
+  function fileToBase64(file) {
 
+    return new Promise((resolve, reject) => {
 
-        function scrollChat() {
+      const reader =
+        new FileReader();
 
-            chatBox.scrollTop = chatBox.scrollHeight;
 
-        }
+      reader.onload = () => {
 
+        resolve(reader.result);
+      };
 
-        chatForm.addEventListener("submit", async (event) => {
 
-            event.preventDefault();
+      reader.onerror = () => {
 
-            const text = userInput.value.trim();
+        reject(
+          new Error("تعذر قراءة الملف.")
+        );
+      };
 
-            if (!text) return;
 
+      reader.readAsDataURL(file);
 
-            addUserMessage(text);
+    });
+  }
 
-            userInput.value = "";
 
-            userInput.disabled = true;
 
-            sendButton.disabled = true;
+  async function sendMessage() {
 
+    const input =
+      document.getElementById("messageInput");
 
-            const loading = document.createElement("div");
+    const sendBtn =
+      document.getElementById("sendBtn");
 
-            loading.className = "flex gap-3 items-start";
+    const status =
+      document.getElementById("status");
 
-            loading.innerHTML = `
 
-                <div class="w-9 h-9 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center shrink-0">
+    const text =
+      input.value.trim();
 
-                    <i class="fa-solid fa-robot text-sm"></i>
 
-                </div>
+    if (!text && !selectedFile) {
 
-                <div class="bg-slate-800 border border-slate-700/50 p-4 rounded-2xl text-slate-400">
+      return;
+    }
 
-                    <i class="fa-solid fa-circle-notch fa-spin"></i>
 
-                    جاري التفكير...
+    let fileForRequest = selectedFile;
 
-                </div>
 
-            `;
+    input.value = "";
 
-            chatBox.appendChild(loading);
+    sendBtn.disabled = true;
 
-            scrollChat();
+    status.style.display = "block";
 
 
-            try {
+    let userContent = "";
 
-                const response = await fetch("/api/chat", {
 
-                    method: "POST",
+    if (fileForRequest) {
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+      userContent +=
+        "📎 " + fileForRequest.name + "\n\n";
+    }
 
-                    body: JSON.stringify({
-                        text: text
-                    })
 
-                });
+    if (text) {
 
+      userContent += text;
+    }
 
-                /*
-                 * لا نفترض أن Vercel سيرجع JSON دائمًا.
-                 * نقرأ الرد كنص أولًا حتى نعرف الخطأ الحقيقي.
-                 */
 
-                const rawText = await response.text();
+    addMessage(
+      "user",
+      userContent
+    );
 
-                loading.remove();
 
+    try {
 
-                let data = null;
+      let fileData = null;
 
-                try {
 
-                    data = JSON.parse(rawText);
+      if (fileForRequest) {
 
-                } catch (jsonError) {
+        fileData =
+          await fileToBase64(fileForRequest);
+      }
 
-                    throw new Error(
-                        "الخادم أعاد ردًا غير صالح:\n\n" +
-                        rawText.substring(0, 1000)
-                    );
 
-                }
+      const response =
+        await fetch("/api/chat", {
 
+          method: "POST",
 
-                if (!response.ok) {
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-                    throw new Error(
-                        data.error || "حدث خطأ من الخادم."
-                    );
+          body: JSON.stringify({
 
-                }
+            text,
 
+            fileData,
 
-                if (!data.reply) {
+            fileName:
+              fileForRequest
+                ? fileForRequest.name
+                : "",
 
-                    throw new Error(
-                        "لم يصل رد من Gemini."
-                    );
-
-                }
-
-
-                addAIMessage(data.reply);
-
-
-            } catch (error) {
-
-                loading.remove();
-
-                addErrorMessage(
-                    error.message || "حدث خطأ أثناء الاتصال بالخادم."
-                );
-
-            }
-
-
-            userInput.disabled = false;
-
-            sendButton.disabled = false;
-
-            userInput.focus();
+            mimeType:
+              fileForRequest
+                ? fileForRequest.type
+                : ""
+          })
 
         });
 
-    </script>
 
-</body>
+      const data =
+        await response.json();
 
-</html>
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error ||
+          "حدث خطأ في الخادم."
+        );
+      }
+
+
+      if (data.type === "image") {
+
+        addImageMessage(
+          data.image,
+          data.reply
+        );
+
+      } else {
+
+        addMessage(
+          "ai",
+          data.reply ||
+          "لم يصل رد من الذكاء الاصطناعي."
+        );
+      }
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      addMessage(
+        "ai",
+        "❌ " +
+        (
+          error.message ||
+          "حدث خطأ غير متوقع."
+        )
+      );
+
+    } finally {
+
+      removeFile();
+
+      sendBtn.disabled = false;
+
+      status.style.display = "none";
+
+      input.focus();
+    }
+
+  }
+
+</script></body>
+    </html>
