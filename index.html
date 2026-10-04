@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>WASEL_Ai</title>
 
@@ -20,7 +20,7 @@
       --muted: #6b6b6b;
       --border: #e5e5e5;
       --user: #f4f4f4;
-      --black: #171717;
+      --black: #000000;
       --white: #ffffff;
     }
 
@@ -44,8 +44,8 @@
 
     .app {
       display: flex;
-      height: 100vh;
       width: 100%;
+      height: 100vh;
     }
 
     /* =========================
@@ -62,20 +62,20 @@
 
       padding: 14px;
 
-      transition: 0.25s ease;
+      transition: width 0.2s ease;
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
     .sidebar.hidden {
       width: 0;
       padding: 0;
-      overflow: hidden;
       border: none;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      justify-content: space-between;
 
       padding: 10px 8px 18px;
     }
@@ -88,10 +88,12 @@
 
     .new-chat {
       width: 100%;
+
       border: 1px solid var(--border);
-      background: white;
+      background: #ffffff;
 
       border-radius: 10px;
+
       padding: 11px 13px;
 
       cursor: pointer;
@@ -103,7 +105,7 @@
       align-items: center;
       gap: 9px;
 
-      transition: 0.15s;
+      transition: background 0.15s ease;
     }
 
     .new-chat:hover {
@@ -112,14 +114,18 @@
 
     .sidebar-bottom {
       margin-top: auto;
+
       border-top: 1px solid var(--border);
+
       padding-top: 12px;
     }
 
     .side-info {
       color: var(--muted);
+
       font-size: 12px;
       line-height: 1.7;
+
       text-align: center;
     }
 
@@ -129,9 +135,12 @@
 
     .main {
       flex: 1;
+
       display: flex;
       flex-direction: column;
+
       min-width: 0;
+
       background: #ffffff;
     }
 
@@ -149,7 +158,7 @@
 
       border-bottom: 1px solid var(--border);
 
-      background: rgba(255,255,255,0.96);
+      background: #ffffff;
 
       position: relative;
       z-index: 5;
@@ -166,7 +175,7 @@
 
       cursor: pointer;
 
-      font-size: 22px;
+      font-size: 21px;
 
       display: flex;
       align-items: center;
@@ -186,7 +195,9 @@
 
     .header-subtitle {
       margin-right: 8px;
+
       color: #777;
+
       font-size: 12px;
     }
 
@@ -199,14 +210,17 @@
 
       overflow-y: auto;
 
-      padding: 30px 18px 160px;
+      padding: 30px 18px 155px;
 
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
+
+      -webkit-overflow-scrolling: touch;
     }
 
     .chat-inner {
       width: 100%;
       max-width: 850px;
+
       margin: auto;
     }
 
@@ -228,37 +242,52 @@
       padding: 20px;
     }
 
+    /* =========================
+       W LOGO
+    ========================= */
+
     .logo {
-      width: 58px;
-      height: 58px;
+      width: 62px;
+      height: 62px;
 
       border-radius: 16px;
 
-      background: #171717;
-      color: white;
+      background: #ffffff;
+
+      border: 1px solid #e5e5e5;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
-      font-size: 19px;
-      font-weight: 800;
-
       margin-bottom: 18px;
 
-      box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+      box-shadow:
+        0 3px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo svg {
+      width: 45px;
+      height: 45px;
+
+      display: block;
     }
 
     .welcome h1 {
       font-size: 30px;
+
       margin-bottom: 10px;
+
       letter-spacing: -0.8px;
     }
 
     .welcome p {
       color: var(--muted);
+
       font-size: 14px;
+
       max-width: 500px;
+
       line-height: 1.8;
     }
 
@@ -268,19 +297,12 @@
 
     .message {
       display: flex;
+
       gap: 13px;
 
       margin: 0 auto 28px;
 
       width: 100%;
-    }
-
-    .message.user {
-      justify-content: flex-start;
-    }
-
-    .message.assistant {
-      justify-content: flex-start;
     }
 
     .avatar {
@@ -295,15 +317,15 @@
       align-items: center;
       justify-content: center;
 
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
 
       margin-top: 2px;
     }
 
     .assistant .avatar {
-      background: #171717;
-      color: white;
+      background: #000000;
+      color: #ffffff;
     }
 
     .user .avatar {
@@ -313,6 +335,7 @@
 
     .message-content {
       flex: 1;
+
       min-width: 0;
 
       line-height: 1.85;
@@ -320,6 +343,7 @@
       font-size: 15px;
 
       white-space: pre-wrap;
+
       overflow-wrap: anywhere;
     }
 
@@ -338,13 +362,14 @@
     }
 
     /* =========================
-       FILE
+       FILE PREVIEW
     ========================= */
 
     .file-preview {
       margin-bottom: 10px;
 
       border: 1px solid var(--border);
+
       border-radius: 12px;
 
       overflow: hidden;
@@ -356,15 +381,21 @@
 
     .file-preview img {
       display: block;
+
       width: 100%;
+
       max-height: 300px;
+
       object-fit: contain;
+
       background: #f2f2f2;
     }
 
     .file-name {
       padding: 9px 12px;
+
       font-size: 12px;
+
       color: #555;
     }
 
@@ -376,6 +407,8 @@
       margin-top: 10px;
 
       max-width: 520px;
+
+      width: 100%;
 
       border-radius: 15px;
 
@@ -392,15 +425,16 @@
       position: fixed;
 
       bottom: 0;
-      right: 0;
 
+      right: 0;
       left: 0;
 
-      background: linear-gradient(
-        to top,
-        #ffffff 72%,
-        rgba(255,255,255,0)
-      );
+      background:
+        linear-gradient(
+          to top,
+          #ffffff 72%,
+          rgba(255, 255, 255, 0)
+        );
 
       padding: 20px 18px 18px;
 
@@ -409,20 +443,22 @@
 
     .input-wrapper {
       max-width: 850px;
+
       margin: auto;
 
       border: 1px solid #d9d9d9;
 
       border-radius: 18px;
 
-      background: white;
+      background: #ffffff;
 
       box-shadow:
-        0 4px 18px rgba(0,0,0,0.06);
+        0 4px 18px rgba(0, 0, 0, 0.06);
 
       padding: 9px;
 
       display: flex;
+
       align-items: flex-end;
 
       gap: 8px;
@@ -432,6 +468,7 @@
       flex: 1;
 
       border: none;
+
       outline: none;
 
       resize: none;
@@ -445,6 +482,7 @@
       line-height: 1.6;
 
       max-height: 160px;
+
       min-height: 42px;
 
       padding: 9px 7px;
@@ -475,8 +513,6 @@
       justify-content: center;
 
       flex-shrink: 0;
-
-      transition: 0.15s;
     }
 
     .icon-btn:hover {
@@ -492,7 +528,8 @@
       border-radius: 50%;
 
       background: #171717;
-      color: white;
+
+      color: #ffffff;
 
       cursor: pointer;
 
@@ -504,7 +541,7 @@
 
       flex-shrink: 0;
 
-      transition: 0.15s;
+      transition: background 0.15s ease;
     }
 
     .send-btn:hover {
@@ -513,16 +550,23 @@
 
     .send-btn:disabled {
       background: #d5d5d5;
+
       cursor: not-allowed;
     }
 
+    /* =========================
+       FILE INFO
+    ========================= */
+
     .file-info {
       max-width: 850px;
+
       margin: 0 auto 7px;
 
       display: none;
 
       align-items: center;
+
       justify-content: space-between;
 
       background: #f4f4f4;
@@ -542,13 +586,17 @@
 
     .remove-file {
       border: none;
+
       background: transparent;
+
       cursor: pointer;
+
       font-size: 16px;
     }
 
     .footer-note {
       max-width: 850px;
+
       margin: 7px auto 0;
 
       text-align: center;
@@ -563,12 +611,14 @@
     }
 
     /* =========================
-       LOADING
+       TYPING
     ========================= */
 
     .typing {
       display: flex;
+
       align-items: center;
+
       gap: 4px;
 
       padding: 8px 0;
@@ -580,7 +630,7 @@
 
       border-radius: 50%;
 
-      background: #777;
+      background: #777777;
 
       animation: typing 1.2s infinite ease-in-out;
     }
@@ -594,7 +644,9 @@
     }
 
     @keyframes typing {
-      0%, 60%, 100% {
+      0%,
+      60%,
+      100% {
         transform: translateY(0);
         opacity: 0.4;
       }
@@ -616,11 +668,13 @@
 
         top: 0;
         bottom: 0;
+
         right: 0;
 
         z-index: 50;
 
-        box-shadow: -5px 0 25px rgba(0,0,0,0.08);
+        box-shadow:
+          -5px 0 25px rgba(0, 0, 0, 0.08);
       }
 
       .sidebar.hidden {
@@ -645,13 +699,16 @@
 
       .message {
         gap: 9px;
+
         margin-bottom: 23px;
       }
 
       .avatar {
         width: 29px;
         height: 29px;
+
         flex-basis: 29px;
+
         border-radius: 8px;
       }
 
@@ -682,31 +739,60 @@
 
   <div class="app">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
 
       <div class="brand">
-        <div class="brand-name">WASEL_Ai</div>
+
+        <div class="brand-name">
+          WASEL_Ai
+        </div>
+
       </div>
 
-      <button class="new-chat" onclick="newChat()">
+      <button
+        class="new-chat"
+        onclick="newChat()"
+      >
+
         <span>＋</span>
-        <span>محادثة جديدة</span>
+
+        <span>
+          محادثة جديدة
+        </span>
+
       </button>
 
       <div class="sidebar-bottom">
+
         <div class="side-info">
-          WASEL_Ai<br>
+
+          WASEL_Ai
+          <br>
+
           مساعدك الذكي
+
         </div>
+
       </div>
 
     </aside>
 
-    <!-- MAIN -->
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
     <main class="main">
 
       <!-- HEADER -->
+
       <header class="header">
 
         <button
@@ -727,21 +813,84 @@
 
       </header>
 
-      <!-- CHAT -->
-      <section class="chat" id="chat">
 
-        <div class="chat-inner" id="chatInner">
+      <!-- CHAT -->
+
+      <section
+        class="chat"
+        id="chat"
+      >
+
+        <div
+          class="chat-inner"
+          id="chatInner"
+        >
 
           <!-- WELCOME -->
-          <div class="welcome" id="welcome">
+
+          <div
+            class="welcome"
+            id="welcome"
+          >
+
+            <!-- W LOGO -->
 
             <div class="logo">
-              WA
+
+              <svg
+                viewBox="0 0 100 100"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="WASEL_Ai"
+              >
+
+                <!-- الشكل الأسود -->
+
+                <path
+                  d="
+                    M20 28
+                    C20 18, 34 18, 40 28
+                    L50 48
+                    L60 28
+                    C66 18, 80 18, 80 28
+                    C80 40, 68 48, 60 57
+                    L50 68
+                    L40 57
+                    C32 48, 20 40, 20 28
+                    Z
+                  "
+
+                  fill="#000000"
+                />
+
+                <!-- الالتفاف الداخلي -->
+
+                <path
+                  d="
+                    M30 31
+                    C35 27, 39 34, 42 40
+                    L50 56
+                    L58 40
+                    C61 34, 65 27, 70 31
+                  "
+
+                  fill="none"
+
+                  stroke="#ffffff"
+
+                  stroke-width="7"
+
+                  stroke-linecap="round"
+                />
+
+              </svg>
+
             </div>
+
 
             <h1>
               كيف يمكنني مساعدتك؟
             </h1>
+
 
             <p>
               أنا WASEL_Ai، مساعدك الذكي للمحادثة وتحليل الصور والملفات.
@@ -753,13 +902,16 @@
 
       </section>
 
+
       <!-- INPUT -->
+
       <div class="input-area">
 
         <div
           class="file-info"
           id="fileInfo"
         >
+
           <span id="fileName"></span>
 
           <button
@@ -769,9 +921,13 @@
           >
             ×
           </button>
+
         </div>
 
+
         <div class="input-wrapper">
+
+          <!-- ATTACH -->
 
           <button
             class="icon-btn"
@@ -781,12 +937,16 @@
             📎
           </button>
 
+
           <input
             id="fileInput"
             type="file"
             accept="image/*,video/*,audio/*,application/pdf"
             onchange="handleFile(event)"
           />
+
+
+          <!-- TEXT -->
 
           <textarea
             id="messageInput"
@@ -795,6 +955,9 @@
             onkeydown="handleKeyDown(event)"
             oninput="autoResize(this)"
           ></textarea>
+
+
+          <!-- SEND -->
 
           <button
             class="send-btn"
@@ -806,6 +969,7 @@
           </button>
 
         </div>
+
 
         <div class="footer-note">
           قد يخطئ WASEL_Ai أحيانًا، تحقق من المعلومات المهمة.
@@ -819,6 +983,10 @@
 
 
   <script>
+
+    /* =========================
+       VARIABLES
+    ========================= */
 
     let selectedFile = null;
 
@@ -846,10 +1014,57 @@
         document.getElementById("chatInner");
 
       chatInner.innerHTML = `
-        <div class="welcome" id="welcome">
+
+        <div
+          class="welcome"
+          id="welcome"
+        >
 
           <div class="logo">
-            WA
+
+            <svg
+              viewBox="0 0 100 100"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="WASEL_Ai"
+            >
+
+              <path
+                d="
+                  M20 28
+                  C20 18, 34 18, 40 28
+                  L50 48
+                  L60 28
+                  C66 18, 80 18, 80 28
+                  C80 40, 68 48, 60 57
+                  L50 68
+                  L40 57
+                  C32 48, 20 40, 20 28
+                  Z
+                "
+
+                fill="#000000"
+              />
+
+              <path
+                d="
+                  M30 31
+                  C35 27, 39 34, 42 40
+                  L50 56
+                  L58 40
+                  C61 34, 65 27, 70 31
+                "
+
+                fill="none"
+
+                stroke="#ffffff"
+
+                stroke-width="7"
+
+                stroke-linecap="round"
+              />
+
+            </svg>
+
           </div>
 
           <h1>
@@ -865,10 +1080,14 @@
 
       removeFile();
 
-      document.getElementById("messageInput").value = "";
+      document.getElementById(
+        "messageInput"
+      ).value = "";
 
       autoResize(
-        document.getElementById("messageInput")
+        document.getElementById(
+          "messageInput"
+        )
       );
     }
 
@@ -884,8 +1103,10 @@
 
       if (!file) return;
 
+
       const maxSize =
         3.5 * 1024 * 1024;
+
 
       if (file.size > maxSize) {
 
@@ -898,15 +1119,18 @@
         return;
       }
 
+
       selectedFile = file;
 
-      document
-        .getElementById("fileName")
-        .textContent = file.name;
 
-      document
-        .getElementById("fileInfo")
-        .classList.add("show");
+      document.getElementById(
+        "fileName"
+      ).textContent = file.name;
+
+
+      document.getElementById(
+        "fileInfo"
+      ).classList.add("show");
     }
 
 
@@ -914,17 +1138,20 @@
 
       selectedFile = null;
 
-      document
-        .getElementById("fileInput")
-        .value = "";
 
-      document
-        .getElementById("fileInfo")
-        .classList.remove("show");
+      document.getElementById(
+        "fileInput"
+      ).value = "";
 
-      document
-        .getElementById("fileName")
-        .textContent = "";
+
+      document.getElementById(
+        "fileInfo"
+      ).classList.remove("show");
+
+
+      document.getElementById(
+        "fileName"
+      ).textContent = "";
     }
 
 
@@ -959,7 +1186,7 @@
 
 
     /* =========================
-       FILE TO BASE64
+       FILE BASE64
     ========================= */
 
     function fileToBase64(file) {
@@ -973,7 +1200,8 @@
           reader.onload = () =>
             resolve(reader.result);
 
-          reader.onerror = reject;
+          reader.onerror =
+            reject;
 
           reader.readAsDataURL(file);
         }
@@ -994,416 +1222,70 @@
     ) {
 
       const chatInner =
-        document.getElementById("chatInner");
+        document.getElementById(
+          "chatInner"
+        );
+
 
       const welcome =
-        document.getElementById("welcome");
+        document.getElementById(
+          "welcome"
+        );
+
 
       if (welcome) {
         welcome.remove();
       }
 
+
       const message =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       message.className =
         `message ${type}`;
 
-      const avatar =
-        document.createElement("div");
 
-      avatar.className = "avatar";
+      const avatar =
+        document.createElement(
+          "div"
+        );
+
+
+      avatar.className =
+        "avatar";
+
 
       avatar.textContent =
         type === "user"
           ? "أنت"
           : "WA";
 
+
       const content =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       content.className =
         "message-content";
 
 
-      /* FILE */
+      /* IMAGE FILE */
 
       if (
         fileData &&
-        mimeType.startsWith("image/")
+        mimeType.startsWith(
+          "image/"
+        )
       ) {
 
         const preview =
-          document.createElement("div");
-
-        preview.className =
-          "file-preview";
-
-        const img =
-          document.createElement("img");
-
-        img.src = fileData;
-
-        preview.appendChild(img);
-
-        if (fileName) {
-
-          const name =
-            document.createElement("div");
-
-          name.className =
-            "file-name";
-
-          name.textContent =
-            fileName;
-
-          preview.appendChild(name);
-        }
-
-        content.appendChild(preview);
-
-      } else if (fileName) {
-
-        const preview =
-          document.createElement("div");
-
-        preview.className =
-          "file-preview";
-
-        const name =
-          document.createElement("div");
-
-        name.className =
-          "file-name";
-
-        name.textContent =
-          "📎 " + fileName;
-
-        preview.appendChild(name);
-
-        content.appendChild(preview);
-      }
-
-
-      if (text) {
-
-        const textElement =
-          document.createElement("div");
-
-        textElement.textContent =
-          text;
-
-        content.appendChild(textElement);
-      }
-
-
-      message.appendChild(avatar);
-
-      message.appendChild(content);
-
-      chatInner.appendChild(message);
-
-      scrollToBottom();
-
-      return message;
-    }
-
-
-    /* =========================
-       TYPING
-    ========================= */
-
-    function addTyping() {
-
-      const chatInner =
-        document.getElementById("chatInner");
-
-      const message =
-        document.createElement("div");
-
-      message.className =
-        "message assistant";
-
-      message.id =
-        "typingMessage";
-
-      message.innerHTML = `
-        <div class="avatar">WA</div>
-
-        <div class="message-content">
-
-          <div class="typing">
-
-            <span></span>
-            <span></span>
-            <span></span>
-
-          </div>
-
-        </div>
-      `;
-
-      chatInner.appendChild(message);
-
-      scrollToBottom();
-    }
-
-
-    function removeTyping() {
-
-      const typing =
-        document.getElementById(
-          "typingMessage"
-        );
-
-      if (typing) {
-        typing.remove();
-      }
-    }
-
-
-    /* =========================
-       SEND
-    ========================= */
-
-    async function sendMessage() {
-
-      const input =
-        document.getElementById(
-          "messageInput"
-        );
-
-      const sendButton =
-        document.getElementById(
-          "sendButton"
-        );
-
-      const text =
-        input.value.trim();
-
-      if (!text && !selectedFile) {
-        return;
-      }
-
-      sendButton.disabled = true;
-
-      let fileData = null;
-      let fileName = "";
-      let mimeType = "";
-
-
-      /* FILE */
-
-      if (selectedFile) {
-
-        try {
-
-          fileData =
-            await fileToBase64(
-              selectedFile
-            );
-
-          fileName =
-            selectedFile.name;
-
-          mimeType =
-            selectedFile.type;
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "تعذر قراءة الملف."
+          document.createElement(
+            "div"
           );
 
-          sendButton.disabled = false;
-
-          return;
-        }
-      }
-
-
-      /* USER MESSAGE */
-
-      addMessage(
-        "user",
-        text,
-        fileData,
-        fileName,
-        mimeType
-      );
-
-
-      input.value = "";
-
-      autoResize(input);
-
-      removeFile();
-
-      addTyping();
-
-
-      try {
-
-        const response =
-          await fetch(
-            "/api/chat",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                text: text,
-                fileData: fileData,
-                fileName: fileName,
-                mimeType: mimeType
-              })
-            }
-          );
-
-
-        const data =
-          await response.json();
-
-
-        removeTyping();
-
-
-        if (!response.ok) {
-
-          addMessage(
-            "assistant",
-            "❌ " +
-            (
-              data.error ||
-              "حدث خطأ أثناء الاتصال بالخادم."
-            )
-          );
-
-          return;
-        }
-
-
-        /* IMAGE RESPONSE */
-
-        if (
-          data.type === "image" &&
-          data.image
-        ) {
-
-          const message =
-            addMessage(
-              "assistant",
-              data.reply || ""
-            );
-
-          const content =
-            message.querySelector(
-              ".message-content"
-            );
-
-          const image =
-            document.createElement("img");
-
-          image.src =
-            data.image;
-
-          image.className =
-            "generated-image";
-
-          content.appendChild(image);
-
-          scrollToBottom();
-
-          return;
-        }
-
-
-        /* TEXT RESPONSE */
-
-        if (data.reply) {
-
-          addMessage(
-            "assistant",
-            data.reply
-          );
-
-          return;
-        }
-
-
-        addMessage(
-          "assistant",
-          "لم يصل رد مفهوم من الخادم."
-        );
-
-
-      } catch (error) {
-
-        console.error(error);
-
-        removeTyping();
-
-        addMessage(
-          "assistant",
-          "❌ تعذر الاتصال بالخادم. تأكد من اتصال الإنترنت وحاول مرة أخرى."
-        );
-
-      } finally {
-
-        sendButton.disabled = false;
-
-        input.focus();
-      }
-    }
-
-
-    /* =========================
-       SCROLL
-    ========================= */
-
-    function scrollToBottom() {
-
-      const chat =
-        document.getElementById("chat");
-
-      setTimeout(() => {
-
-        chat.scrollTo({
-          top: chat.scrollHeight,
-          behavior: "smooth"
-        });
-
-      }, 50);
-    }
-
-
-    /* =========================
-       START
-    ========================= */
-
-    window.addEventListener(
-      "load",
-      () => {
-
-        const sidebar =
-          document.getElementById(
-            "sidebar"
-          );
-
-        if (window.innerWidth <= 700) {
-          sidebar.classList.add("hidden");
-        }
-
-      }
-    );
-
-  </script>
-
-</body>
-</html>
+   
