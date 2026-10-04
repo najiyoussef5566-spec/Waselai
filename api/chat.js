@@ -1,9 +1,4 @@
-export default async function handler(req, res) {
-try {
-if (req.method !== "POST") {
-return res.status(405).json({ error: "Method Not Allowed" });
-}
-
+export default async function handler(req, res) { try { if (req.method !== "POST") { return res.status(405).json({ error: "Method Not Allowed" }); }
 const apiKey = process.env.GEMINI_API_KEY;
 
 if (!apiKey) {
@@ -13,6 +8,7 @@ if (!apiKey) {
 }
 
 const body = req.body || {};
+
 const text = String(body.text || "").trim();
 const fileData = body.fileData || null;
 const mimeType = String(body.mimeType || "");
@@ -57,10 +53,9 @@ const imageKeywords = [
 
 const lowerText = text.toLowerCase();
 
-const wantsImage =
-  imageKeywords.some(keyword =>
-    lowerText.includes(keyword.toLowerCase())
-  );
+const wantsImage = imageKeywords.some(keyword =>
+  lowerText.includes(keyword.toLowerCase())
+);
 
 if (wantsImage) {
   return await generateImage(
@@ -93,7 +88,7 @@ parts.push({
     getDefaultInstruction(mimeType)
 });
 
-const response = await fetch(
+const response = await fetchWithRetry(
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
   {
     method: "POST",
@@ -166,47 +161,73 @@ return res.status(200).json({
   type: "text",
   reply
 });
-
-} catch (error) {
-console.error("SERVER ERROR:", error);
-
+} catch (error) { console.error("SERVER ERROR:", error);
 return res.status(500).json({
   error:
     error?.message ||
     "حدث خطأ غير متوقع."
 });
-
-}
-}
-
-function getDefaultInstruction(mimeType) {
-if (mimeType.startsWith("image/")) {
-return "حلل هذه الصورة بالتفصيل.";
-}
-
-if (mimeType.startsWith("video/")) {
-return "حلل هذا الفيديو واشرح أهم ما يحدث فيه.";
-}
-
-if (mimeType.startsWith("audio/")) {
-return "حلل هذا الملف الصوتي واشرح محتواه.";
-}
-
-if (mimeType === "application/pdf") {
-return "اقرأ هذا الملف PDF واشرح محتواه وأهم المعلومات فيه.";
-}
-
-return "حلل الملف المرفق.";
-}
-
-async function generateImage(
-res,
-apiKey,
-text,
-fileData,
-mimeType
-) {
+} }
+async function fetchWithRetry( url, options, maxRetries = 4 ) { let lastResponse = null;
+for (let attempt = 0; attempt <= maxRetries; attempt++) {
 try {
+  const response = await fetch(url, options);
+
+  if (
+    response.status !== 429 &&
+    response.status !== 503 &&
+    response.status < 500
+  ) {
+    return response;
+  }
+
+  lastResponse = response;
+
+  if (attempt === maxRetries) {
+    return response;
+  }
+
+  const delay =
+    Math.min(
+      1500 * Math.pow(2, attempt),
+      10000
+    ) +
+    Math.floor(Math.random() * 500);
+
+  console.log(
+    `Gemini retry ${attempt + 1}/${maxRetries} after ${delay}ms`
+  );
+
+  await sleep(delay);
+
+} catch (error) {
+
+  if (attempt === maxRetries) {
+    throw error;
+  }
+
+  const delay =
+    Math.min(
+      1500 * Math.pow(2, attempt),
+      10000
+    );
+
+  console.log(
+    `Network retry ${attempt + 1}/${maxRetries}`
+  );
+
+  await sleep(delay);
+}
+}
+return lastResponse; }
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms) ); }
+function getDefaultInstruction(mimeType) {
+if (mimeType.startsWith("image/")) { return "حلل هذه الصورة بالتفصيل."; }
+if (mimeType.startsWith("video/")) { return "حلل هذا الفيديو واشرح أهم ما يحدث فيه."; }
+if (mimeType.startsWith("audio/")) { return "حلل هذا الملف الصوتي واشرح محتواه."; }
+if (mimeType === "application/pdf") { return "اقرأ هذا الملف PDF واشرح محتواه وأهم المعلومات فيه."; }
+return "حلل الملف المرفق."; }
+async function generateImage( res, apiKey, text, fileData, mimeType ) { try {
 const input = [];
 
 if (
@@ -214,6 +235,7 @@ if (
   mimeType &&
   mimeType.startsWith("image/")
 ) {
+
   const cleanBase64 = fileData.includes(",")
     ? fileData.split(",")[1]
     : fileData;
@@ -232,7 +254,7 @@ input.push({
     "أنشئ صورة عالية الجودة."
 });
 
-const response = await fetch(
+const response = await fetchWithRetry(
   "https://generativelanguage.googleapis.com/v1beta/interactions",
   {
     method: "POST",
@@ -264,7 +286,8 @@ try {
   data = JSON.parse(raw);
 } catch {
   return res.status(502).json({
-    error: "خدمة توليد الصور أعادت استجابة غير مفهومة."
+    error:
+      "خدمة توليد الصور أعادت استجابة غير مفهومة."
   });
 }
 
@@ -280,6 +303,7 @@ let image = null;
 let generatedText = "";
 
 if (data?.output_image?.data) {
+
   const imageMime =
     data.output_image.mime_type ||
     "image/png";
@@ -289,16 +313,20 @@ if (data?.output_image?.data) {
 }
 
 if (!image && Array.isArray(data?.steps)) {
+
   for (const step of data.steps) {
+
     if (step?.type !== "model_output") {
       continue;
     }
 
     for (const block of step.content || []) {
+
       if (
         block?.type === "image" &&
         block?.data
       ) {
+
         const imageMime =
           block.mime_type ||
           "image/png";
@@ -311,6 +339,7 @@ if (!image && Array.isArray(data?.steps)) {
         block?.type === "text" &&
         block?.text
       ) {
+
         generatedText += block.text;
       }
     }
@@ -319,7 +348,8 @@ if (!image && Array.isArray(data?.steps)) {
 
 if (!image) {
   return res.status(500).json({
-    error: "Gemini لم يُرجع صورة."
+    error:
+      "Gemini لم يُرجع صورة."
   });
 }
 
@@ -328,15 +358,15 @@ return res.status(200).json({
   image,
   reply: generatedText
 });
-
 } catch (error) {
-console.error("IMAGE ERROR:", error);
+console.error(
+  "IMAGE ERROR:",
+  error
+);
 
 return res.status(500).json({
   error:
     error?.message ||
     "حدث خطأ أثناء إنشاء الصورة."
 });
-
-}
-    }
+} }
