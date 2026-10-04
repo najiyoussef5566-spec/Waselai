@@ -14,6 +14,7 @@ export default async function handler(req, res) {
       });
     }
 
+    // قراءة مفتاح Gemini من متغيرات Vercel
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -22,22 +23,29 @@ export default async function handler(req, res) {
       });
     }
 
+    // إرسال الطلب إلى Gemini
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" +
         encodeURIComponent(apiKey),
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify({
           system_instruction: {
             parts: [
               {
-                text: "أنت واصل AI، مساعد ذكاء اصطناعي عربي. أجب باللغة العربية بشكل واضح ومفيد."
+                text:
+                  "أنت واصل AI، مساعد ذكاء اصطناعي عربي. " +
+                  "أجب باللغة العربية بشكل واضح ومفيد، " +
+                  "ويمكنك استخدام المصطلحات الإنجليزية عند الحاجة."
               }
             ]
           },
+
           contents: [
             {
               parts: [
@@ -53,6 +61,7 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
+    // إذا Gemini أعاد خطأ
     if (!response.ok) {
       console.error("Gemini API Error:", data);
 
@@ -63,6 +72,7 @@ export default async function handler(req, res) {
       });
     }
 
+    // استخراج الرد
     const reply =
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
@@ -72,6 +82,7 @@ export default async function handler(req, res) {
       });
     }
 
+    // إرسال الرد إلى واجهة واصل AI
     return res.status(200).json({
       reply: reply
     });
@@ -80,7 +91,9 @@ export default async function handler(req, res) {
     console.error("SERVER ERROR:", error);
 
     return res.status(500).json({
-      error: error?.message || "حدث خطأ في الخادم."
+      error:
+        error?.message ||
+        "حدث خطأ في الخادم."
     });
   }
 }
